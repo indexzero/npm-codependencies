@@ -12,6 +12,7 @@ var fs = require('fs'),
 var registry = argv.r || 'http://localhost:5984/registry',
     package  = argv.p || 'winston',
     view     = argv.v || 'dependencies',
+    skip     = argv.s || 0;
     top      = argv.t || 10;
 
 console.log('start   | co-*dependencies');
@@ -31,15 +32,26 @@ ddocs.seed(registry, function (err) {
     '----------------------------'
   ].join('\n'), registry, package, view, top);
 
+  //
+  // ### function zeroArray(len)
+  // Return a zero-filled array of len
+  //
+  function zeroArray(len) {
+    return Array.apply(null, new Array(len))
+      .map(Number.prototype.valueOf, 0);
+  }
+
   matrix({
     package:  package,
     registry: registry,
+    skip:     skip,
     top:      top
   }, function (err, codeps, pkg) {
     if (err) { throw err; }
 
     var names  = Object.keys(codeps).sort().filter(function (n) { return n !== 'total' }),
-        matrix = [];
+        matrix = [],
+        values = [];
 
     //
     // For each of the codeps in rows
@@ -47,15 +59,16 @@ ddocs.seed(registry, function (err) {
     // it's peers
     //
     names.forEach(function (name) {
-      var row = Array.apply(null, new Array(15))
-        .map(Number.prototype.valueOf, 0);
+      var row   = zeroArray(top),
+          value = zeroArray(top);
 
       names.forEach(function (coname) {
         if (name === coname) { return }
 
         var index = names.indexOf(coname);
         if (index !== -1 && codeps[name][coname]) {
-          row[index] = codeps[name][coname].count
+          value[index] = codeps[name][coname].count;
+          row[index]   = codeps[name][coname].count
             * (codeps[name][coname].count / codeps[name].total)
             * pkg[name].relative;
 
@@ -68,6 +81,7 @@ ddocs.seed(registry, function (err) {
       });
 
       matrix.push(row);
+      values.push(value);
     });
 
     if (process.env.DEBUG) {
@@ -76,7 +90,8 @@ ddocs.seed(registry, function (err) {
         lattice: pkg,
         names: names,
         codeps: codeps,
-        matrix: matrix
+        matrix: matrix,
+        values: values
       });
     }
 

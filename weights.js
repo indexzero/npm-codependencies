@@ -61,7 +61,9 @@ var weights = module.exports = function weights(options, callback) {
       .filter(options.filter);
 
     if (options.top) {
-      reduced = reduced.slice(0, options.top)
+      reduced = options.skip
+        ? reduced.slice(options.skip, options.top)
+        : reduced.slice(0, options.top);
     }
 
     reduced = reduced.reduce(function (all, name) {

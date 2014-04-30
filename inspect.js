@@ -22,13 +22,12 @@ var inspect = module.exports;
 // a given package, options.name.
 //
 inspect.codependencies = inspect.codeps = function (context) {
-  var table   = new Table(),
-      name    = context.name,
+  var name    = context.name,
       lattice = context.lattice,
       names   = context.names,
       codeps  = context.codeps,
       matrix  = context.matrix,
-      display;
+      values  = context.values;
 
   //
   // ### function dump (name, latt)
@@ -54,45 +53,51 @@ inspect.codependencies = inspect.codeps = function (context) {
     dumpLattice(coname, codeps[coname]);
   });
 
-  //
-  // Copy the matrix so we can modify it for
-  // display.
-  //
-  display = matrix.reduce(function (copy, row) {
-    copy.push(row.slice());
-    return copy;
-  }, []);
+  function displayMatrix(rows) {
+    //
+    // Copy the matrix so we can modify it for
+    // display.
+    //
+    var table   = new Table(),
+        display;
 
-  //
-  // Modify the matrix as follows and then display it
-  // 1. Truncate to 6 significant figures.
-  // 2. Add the row headers.
-  // 3. Add the column headers.
-  //
-  // TODO: Make precision configurable.
-  // TODO: Make dumping the raw matrix configurable
-  // console.dir(matrix);
-  //
-  display.forEach(function (row, i) {
-    for (var j = 0; j < row.length; j++) {
-      row[j] = typeof row[j] === 'number'
-        ? row[j].toFixed(4)
-        : '';
-    }
+    display = rows.map(function (row) {
+      return row.slice();
+    });
 
-    row.unshift(names[i].slice(0, 4) + '…');
-  });
+    //
+    // Modify the matrix as follows and then display it
+    // 1. Truncate to 6 significant figures.
+    // 2. Add the row headers.
+    // 3. Add the column headers.
+    //
+    // TODO: Make precision configurable.
+    // TODO: Make dumping the raw matrix configurable
+    // console.dir(matrix);
+    //
+    display.forEach(function (row, i) {
+      for (var j = 0; j < row.length; j++) {
+        row[j] = typeof row[j] === 'number'
+          ? row[j].toFixed(4)
+          : '';
+      }
 
-  display.unshift(
-    names.slice().map(function (name) {
-      return name.slice(0, 4) + '…';
-    })
-  );
+      row.unshift(names[i].slice(0, 4) + '…');
+    });
 
-  display[0].unshift('');
-  table.push.apply(table, display);
-  console.log(table.toString());
+    display.unshift(
+      names.slice().map(function (name) {
+        return name.slice(0, 4) + '…';
+      })
+    );
 
+    display[0].unshift('');
+    table.push.apply(table, display);
+    console.log(table.toString());
+  }
+
+  displayMatrix(values);
+  displayMatrix(matrix);
   //
   // This could be useful later.
   //
