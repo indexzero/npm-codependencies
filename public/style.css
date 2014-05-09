@@ -6,3 +6,7 @@ body {
   fill-opacity: .67;
 }
 
+.fade {
+  fill-opacity: .1;
+}
+
