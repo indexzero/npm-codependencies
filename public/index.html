@@ -1,6 +1,10 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="style.css">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <title>npm comp stat</title>
+</head>
+
 <body>
 <div id="tooltip"></div>
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -9,8 +13,8 @@
 var packageParts = /\?p=([\w\.\-\_]+)$/.exec(window.location),
     packageName  = (packageParts && packageParts[1]) || 'express'
 // TODO: dynamically size?
-    width = 900,
-    height = 800
+    width = 800,
+    height = 750,
     outerRadius  = height / 2,
     innerRadius  = outerRadius - 100;
 
