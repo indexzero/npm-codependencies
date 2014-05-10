@@ -12,9 +12,10 @@ var packageName  = params.p || 'express'
     innerRadius  = outerRadius - 100,
     numResults   = params.t;
 
-// TODO: change colors
+// TODO: make 20 colors
 var fill = d3.scale.category20c();
 
+// TODO: hacky
 function draw(p, v, s, t) {
   var chord = d3.layout.chord()
     .padding(.08)
@@ -124,7 +125,7 @@ function draw(p, v, s, t) {
       d3.select("#tooltip").style("visibility", "hidden");
     }
 
-  }, 100);
+  }, 100); // TODO: timeout should go elsewhere
 
   d3.select(self.frameElement).style("height", outerRadius * 2 + "px");
 
