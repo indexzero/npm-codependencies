@@ -32,6 +32,7 @@ path.chord {
 }
 
 #circle:hover path.fade {
-  fill-opacity: .05;
+  fill-opacity: .1;
   stroke-opacity: 0;
+  /*display: none;*/
 }
