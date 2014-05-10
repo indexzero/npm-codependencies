@@ -1,11 +1,12 @@
 var packageParts = /\?p=([\w\.\-\_]+)$/.exec(window.location),
     packageName  = (packageParts && packageParts[1]) || 'express'
-    width = 800,
-    height = 750,
+    width        = 800,
+    height       = 750,
     outerRadius  = height / 2,
     innerRadius  = outerRadius - 100,
-    header = document.getElementsByTagName("h1")[0],
-    header.innerHTML += packageName;
+    header       = document.getElementById("package-name"),
+    number       = document.getElementById("top-number");
+
 
 // TODO: change colors
 var fill = d3.scale.category20c();
@@ -31,13 +32,16 @@ var svg = d3.select("body")
         .attr("r", innerRadius + 20);
 
 var graph = svg.append("g")
-  .attr("transform", "translate(" + outerRadius * 1.25 + "," + outerRadius + ")");
+    .attr("transform", "translate(" + outerRadius * 1.25 + "," + outerRadius + ")");
 
 d3.json("samples/" + packageName + '-display.json', function(error, display) {
 
   var names  = display.names,
       matrix = [],
-      n = 0;
+      n      = 0;
+
+  header.innerHTML += packageName;
+  // number.innerHTML += names.length;
 
   chord.matrix(display.matrix);
 
@@ -49,7 +53,7 @@ d3.json("samples/" + packageName + '-display.json', function(error, display) {
       .style("fill", function(d) { return fill(d.index); })
       .style("stroke", function(d) { d3.rgb(fill(d.index)).darker() })
       .on("mouseover", gMouseover)
-      .on("mouseout", function (d) { d3.select("#tooltip").style("visibility", "hidden") });
+      .on("mouseout", hide);
 
   g.append("svg:path")
       .style("fill", function(d) { return fill(d.index); })
@@ -57,7 +61,7 @@ d3.json("samples/" + packageName + '-display.json', function(error, display) {
 
   /* Package labels */
   g.append("svg:text")
-      .each(function(d) { d.angle = (d.startAngle + d.endAngle) / 2; })
+    .each(function(d) { d.angle = (d.startAngle + d.endAngle) / 2; })
       .attr("dy", ".35em")
       .attr("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
       .attr("transform", function(d) {
@@ -76,28 +80,27 @@ d3.json("samples/" + packageName + '-display.json', function(error, display) {
       .style("fill", function(d) { return fill(d.source.index); })
       .attr("d", d3.svg.chord().radius(innerRadius))
       .on("mouseover", cMouseover)
-      .on("mouseout", function (d) { d3.select("#tooltip").style("visibility", "hidden") });
+      .on("mouseout", hide);
 
   /* Chord information */
   function chordTip (d, i) {
     var p = d3.format(".2%"), q = d3.format(",.3r")
-    // return d;
-    return "chord";
+    return names[d.source.index] + " to " + names[d.target.index];
   }
 
   function cMouseover(d, i) {
     d3.select("#tooltip")
-    .style("visibility", "visible")
-    .html(chordTip(d, i))
-    .style("top", function () { return (d3.event.pageY - 100)+"px"})
-    .style("left", function () { return (d3.event.pageX - 100)+"px";})
+      .style("visibility", "visible")
+      .html(chordTip(d, i))
+      .style("top", function () { return (d3.event.pageY - 100)+"px"})
+      .style("left", function () { return (d3.event.pageX - 100)+"px";})
   };
 
   /* Group (dependency) information */
   function groupTip (d) {
     var p = d3.format(".1%"), q = d3.format(",.3r")
-    // return d;
-    return "group";
+    // debugger;
+    return names[d.index];
   }
 
   function gMouseover(d, i) {
@@ -111,6 +114,10 @@ d3.json("samples/" + packageName + '-display.json', function(error, display) {
       return p.source.index != i
           && p.target.index != i;
     });
+  }
+
+  function hide() {
+    d3.select("#tooltip").style("visibility", "hidden");
   }
 
 }, 100);

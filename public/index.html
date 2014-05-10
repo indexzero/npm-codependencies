@@ -1,24 +1,31 @@
 <!DOCTYPE html>
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.4.2/pure-min.css">
+  <!-- <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.4.2/pure-min.css"> -->
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="style.css">
   <title>npm comp stat</title>
 </head>
 
 <body>
-<h1>Analysis of </h1>
+<h1>Analysis of <span id="package-name"></span></h1>
+  <form>
+    <input name="p" placeholder="Package Name">
+    <label>Show top</label>
+    <select name="t">
+      <option value="5">5</option>
+      <option value="10" selected>10</option>
+      <option value="15">15</option>
+      <option value="20">20</option>
+      <option value="25">25</option>
+    </select>
+    <button type="submit">Search</button>
+  </form>
 
-<form>
-  <input name="p" placeholder="Package Name">
-  <button type="submit">Search</button>
-</form>
+  <div id="tooltip"></div>
 
-<div id="tooltip"></div>
-
-
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="chart.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="chart.js"></script>
 
 </body>
 </html>
