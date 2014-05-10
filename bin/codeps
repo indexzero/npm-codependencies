@@ -56,7 +56,7 @@ ddocs.seed(registry, function (err) {
     //
     // For each of the codeps in rows
     // return an Array of values for only
-    // it's peers
+    // its peers
     //
     names.forEach(function (name) {
       var row   = zeroArray(top),
