@@ -5,12 +5,13 @@
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 
-// TODO: dynamically size?
 var packageParts = /\?p=([\w\.\-\_]+)$/.exec(window.location),
-    packageName  = (packageParts && packageParts[1]) || 'winston'
+    packageName  = (packageParts && packageParts[1]) || 'express'
+// TODO: dynamically size?
     outerRadius  = 800 / 2,
     innerRadius  = outerRadius - 100;
 
+// TODO: change colors
 var fill = d3.scale.category20c();
 
 var chord = d3.layout.chord()
@@ -58,7 +59,9 @@ d3.json("samples/" + packageName + '-display.json', function(error, display) {
       .attr("d", arc)
       .on("mouseover", function(d, i) {
         d.classed("fade", function(p) {
-          return p.source.index != i && p.target.index != i;
+          // console.log("something");
+          // return p.source.index != i && p.target.index != i;
+          return p;
         });
       });
 
