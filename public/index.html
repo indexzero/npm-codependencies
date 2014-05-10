@@ -59,9 +59,7 @@ d3.json("samples/" + packageName + '-display.json', function(error, display) {
       .attr("d", arc)
       .on("mouseover", function(d, i) {
         d.classed("fade", function(p) {
-          // console.log("something");
-          // return p.source.index != i && p.target.index != i;
-          return p;
+          return p.source.index != i && p.target.index != i;
         });
       });
 
