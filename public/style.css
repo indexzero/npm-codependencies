@@ -1,5 +1,66 @@
 body {
-  font: 14px sans-serif;
+  margin: 0 1em;
+  padding: 0;
+  font-weight: 300;
+  font-size: 14px;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+h1 {
+  margin: 0.67em 0;
+  font-size: 2em;
+}
+
+h2 {
+  margin: 0.83em 0;
+  font-size: 1.5em;
+}
+
+h3 {
+  margin: 1em 0;
+  font-size: 1.17em;
+}
+
+h4 {
+  margin: 1.33em 0;
+  font-size: 1em;
+}
+
+h5 {
+  margin: 1.67em 0;
+  font-size: 0.83em;
+}
+
+h6 {
+  margin: 2.33em 0;
+  font-size: 0.67em;
+}
+
+button {
+  padding: 10px 20px 10px 20px;
+  border: none;
+  -webkit-border-radius: 5;
+  -moz-border-radius: 5;
+  border-radius: 5px;
+  background: #3498db;
+  box-shadow: none;
+  color: #fff;
+  text-decoration: none;
+}
+
+button:hover {
+  background: #3cb0fd;
+  text-decoration: none;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 5;
+  -moz-border-radius: 5;
+  border-radius: 5px;
+  box-shadow: none;
+  text-decoration: none;
 }
 
 #tooltip {
@@ -36,3 +97,4 @@ path.chord {
   stroke-opacity: 0;
   /*display: none;*/
 }
+
