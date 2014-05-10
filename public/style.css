@@ -26,23 +26,13 @@ h4 {
   font-size: 1em;
 }
 
-h5 {
-  margin: 1.67em 0;
-  font-size: 0.83em;
-}
-
-h6 {
-  margin: 2.33em 0;
-  font-size: 0.67em;
-}
-
 button {
-  padding: 10px 20px 10px 20px;
+  padding: 10px 15px;
   border: none;
   -webkit-border-radius: 5;
   -moz-border-radius: 5;
   border-radius: 5px;
-  background: #3498db;
+  background: #b0dffe;
   box-shadow: none;
   color: #fff;
   text-decoration: none;
@@ -98,3 +88,9 @@ path.chord {
   /*display: none;*/
 }
 
+text {
+  font-weight: 300;
+  font-size: 1.2em;
+  stroke: none;
+  fill: #000;
+}

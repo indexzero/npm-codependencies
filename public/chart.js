@@ -57,9 +57,6 @@ d3.json("samples/" + packageName + '-display.json', function(error, display) {
   g.append("svg:text")
       .each(function(d) { d.angle = (d.startAngle + d.endAngle) / 2; })
       .attr("dy", ".35em")
-      .style("stroke", "none")
-      .style("fill", "#000")
-      .style("font-family", "helvetica, arial, sans-serif")
       .attr("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
       .attr("transform", function(d) {
         return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
@@ -80,14 +77,12 @@ d3.json("samples/" + packageName + '-display.json', function(error, display) {
 
   function chordTip (d, i) {
     var p = d3.format(".2%"), q = d3.format(",.3r")
-    // debugger;
     // return d;
     return "chord";
   }
 
   function groupTip (d) {
     var p = d3.format(".1%"), q = d3.format(",.3r")
-    // debugger;
     // return d;
     return "group";
   }
