@@ -3,22 +3,22 @@ body {
 }
 
 #tooltip {
-  color: white;
-  opacity: .9;
-  background: #333;
-  padding: 5px;
-  border: 1px solid lightgrey;
-  border-radius: 5px;
   position: absolute;
   z-index: 10;
   visibility: hidden;
+  padding: 5px;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+  background: #333;
+  color: white;
   white-space: nowrap;
+  opacity: .9;
   pointer-events: none;
 }
 
 #circle circle {
-  fill: none;
   pointer-events: all;
+  fill: none;
 }
 
 path.group {
@@ -32,5 +32,6 @@ path.chord {
 }
 
 #circle:hover path.fade {
-  display: none;
+  fill-opacity: .05;
+  stroke-opacity: 0;
 }
