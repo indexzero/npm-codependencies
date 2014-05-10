@@ -41,6 +41,7 @@ d3.json("samples/" + packageName + '-display.json', function(error, display) {
 
   chord.matrix(display.matrix);
 
+  /* Create arcs (dependent packages) */
   var g = svg.selectAll("g.group")
       .data(chord.groups())
     .enter().append("svg:g")
@@ -54,6 +55,7 @@ d3.json("samples/" + packageName + '-display.json', function(error, display) {
       .style("fill", function(d) { return fill(d.index); })
       .attr("d", arc);
 
+  /* Package labels */
   g.append("svg:text")
       .each(function(d) { d.angle = (d.startAngle + d.endAngle) / 2; })
       .attr("dy", ".35em")
@@ -65,6 +67,7 @@ d3.json("samples/" + packageName + '-display.json', function(error, display) {
       })
       .text(function(d) { return names[d.index]; });
 
+  /* Create chords */
   var chordPaths = svg.selectAll("path.chord")
       .data(chord.chords())
     .enter().append("svg:path")
@@ -75,16 +78,11 @@ d3.json("samples/" + packageName + '-display.json', function(error, display) {
       .on("mouseover", cMouseover)
       .on("mouseout", function (d) { d3.select("#tooltip").style("visibility", "hidden") });
 
+  /* Chord information */
   function chordTip (d, i) {
     var p = d3.format(".2%"), q = d3.format(",.3r")
     // return d;
     return "chord";
-  }
-
-  function groupTip (d) {
-    var p = d3.format(".1%"), q = d3.format(",.3r")
-    // return d;
-    return "group";
   }
 
   function cMouseover(d, i) {
@@ -93,8 +91,15 @@ d3.json("samples/" + packageName + '-display.json', function(error, display) {
     .html(chordTip(d, i))
     .style("top", function () { return (d3.event.pageY - 100)+"px"})
     .style("left", function () { return (d3.event.pageX - 100)+"px";})
-
   };
+
+  /* Group (dependency) information */
+  function groupTip (d) {
+    var p = d3.format(".1%"), q = d3.format(",.3r")
+    // return d;
+    return "group";
+  }
+
   function gMouseover(d, i) {
     d3.select("#tooltip")
       .style("visibility", "visible")
