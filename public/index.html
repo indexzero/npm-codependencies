@@ -2,13 +2,16 @@
 <meta charset="utf-8">
 <link rel="stylesheet" type="text/css" href="style.css">
 <body>
+<div id="tooltip"></div>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 
 var packageParts = /\?p=([\w\.\-\_]+)$/.exec(window.location),
     packageName  = (packageParts && packageParts[1]) || 'express'
 // TODO: dynamically size?
-    outerRadius  = 800 / 2,
+    width = 900,
+    height = 800
+    outerRadius  = height / 2,
     innerRadius  = outerRadius - 100;
 
 // TODO: change colors
@@ -25,87 +28,96 @@ var arc = d3.svg.arc()
 
 var svg = d3.select("body")
   .append("svg")
-    .attr("width", outerRadius * 4)
-    .attr("height", outerRadius * 2);
+    .attr("width", width)
+    .attr("height", height)
+  .append("svg:g")
+    .attr("id", "circle")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-svg.append("text")
-  .attr('transform', 'translate(20,60)')
-  .attr("font-size", "60px")
-  .attr("text-decoration", "underline")
-  .attr('fill', d3.rgb('#333'))
-  .text(packageName);
+    svg.append("circle")
+        .attr("r", innerRadius + 20);
 
 var graph = svg.append("g")
-  .attr("transform", "translate(" + outerRadius*1.25 + "," + outerRadius + ")");
-
+  .attr("transform", "translate(" + outerRadius * 1.25 + "," + outerRadius + ")");
 
 d3.json("samples/" + packageName + '-display.json', function(error, display) {
+
   var names  = display.names,
       matrix = [],
       n = 0;
 
-  chord.matrix(
-    display.matrix
-  );
+  chord.matrix(display.matrix);
 
-  /* fill arcs */
-  var arcs = graph.append("g")
-      .attr("class", "arcs")
-    .selectAll("path")
-      .data(chord.groups)
-    .enter().append("path")
+  var g = svg.selectAll("g.group")
+      .data(chord.groups())
+    .enter().append("svg:g")
+      .attr("class", "group")
       .style("fill", function(d) { return fill(d.index); })
       .style("stroke", function(d) { return fill(d.index); })
-      .attr("d", arc)
-      .on("mouseover", function(d, i) {
-        d.classed("fade", function(p) {
-          return p.source.index != i && p.target.index != i;
-        });
-      });
+      .on("mouseover", mouseover)
+      .on("mouseout", function (d) { d3.select("#tooltip").style("visibility", "hidden") });
 
-  /* add module label */
-  var labels = graph.append("g")
-      .attr("class", "labels")
-    .selectAll("g")
-      .data(chord.groups)
-    .enter().append("g")
-    .append("text")
-      .each(function(d) {
-        d.angle = (d.startAngle + d.endAngle) / 2;
-      })
-      .attr("dy", ".15em")
+  g.append("svg:path")
+      .style("fill", function(d) { return fill(d.index); })
+      .attr("d", arc);
+
+  g.append("svg:text")
+      .each(function(d) { d.angle = (d.startAngle + d.endAngle) / 2; })
+      .attr("dy", ".35em")
+      .style("stroke", "none")
+      .style("fill", "#000")
+      .style("font-family", "helvetica, arial, sans-serif")
+      .attr("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
       .attr("transform", function(d) {
         return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
             + "translate(" + (innerRadius + 26) + ")"
             + (d.angle > Math.PI ? "rotate(180)" : "");
       })
-      .style("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
       .text(function(d) { return names[d.index]; });
 
-  var chords = graph.append("g")
-      .attr("class", "chords")
-    .selectAll("path")
-      .data(chord.chords)
-    .enter().append("path")
+  var chordPaths = svg.selectAll("path.chord")
+      .data(chord.chords())
+    .enter().append("svg:path")
       .attr("class", "chord")
       .style("stroke", function(d) { return d3.rgb(fill(d.source.index)).darker(); })
       .style("fill", function(d) { return fill(d.source.index); })
-      .attr("d", d3.svg.chord().radius(innerRadius));
+      .attr("d", d3.svg.chord().radius(innerRadius))
+      .on("mouseover", function (d) {
+        d3.select("#tooltip")
+          .style("visibility", "visible")
+          .html(chordTip(d))
+          .style("top", function () { return (d3.event.pageY - 100)+"px"})
+          .style("left", function () { return (d3.event.pageX - 100)+"px";})
+      })
+      .on("mouseout", function (d) { d3.select("#tooltip").style("visibility", "hidden") });
+
+  function chordTip (d) {
+    var p = d3.format(".2%"), q = d3.format(",.3r")
+    // debugger;
+    return d;
+  }
+
+  function groupTip (d) {
+    var p = d3.format(".1%"), q = d3.format(",.3r")
+    // debugger;
+    return d;
+  }
+
+  function mouseover(d, i) {
+    d3.select("#tooltip")
+      .style("visibility", "visible")
+      .html(groupTip(d))
+      .style("top", function () { return (d3.event.pageY - 80)+"px"})
+      .style("left", function () { return (d3.event.pageX - 130)+"px";})
+
+    chordPaths.classed("fade", function(p) {
+      return p.source.index != i
+          && p.target.index != i;
+    });
+  }
 
 }, 100);
 
 d3.select(self.frameElement).style("height", outerRadius * 2 + "px");
 
-/** Returns an event handler for fading a given chord group. */
-function fade(opacity, svg) {
-  return function(g, i) {
-    graph.selectAll("g.chords path")
-      .filter(function(d) {
-        return d.source.index != i && d.target.index != i;
-      })
-      .transition()
-        .duration(150)
-        .style("opacity", opacity);
-  };
-}
 </script>
