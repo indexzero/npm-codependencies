@@ -226,11 +226,8 @@ function codependencyGraph(codeps) {
   // Append the <h3> representing the subtitle of this diagram.
   //
   container.append('h3')
-    .style('margin-top', '30px')
-    .text(codeps.type)
-
-  container.append('h4')
-    .text(codeps.lattice.total.subset + ' of ' + codeps.lattice.total.absolute);
+    .text(codeps.type + ': '
+      + codeps.lattice.total.subset + ' of ' + codeps.lattice.total.absolute)
 }
 
 //

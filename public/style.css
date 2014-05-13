@@ -15,41 +15,37 @@ svg {
 h1 {
   clear: both;
   margin: 0.6em 0 0.1em;
+  padding-bottom: 1.25em;
   font-weight: 300;
   font-size: 4em;
 }
 
 h1 span {
-  font-weight: 700;
+  font-weight: 800;
 }
 
 h3 {
-  font-size: 2em;
-  font-weight: bold;
-  text-decoration: underline;
+  margin-top: 30px;
   text-align: center;
+  font-size: 2em;
 }
 
 h4 {
-  font-size: 1.5em;
-  font-weight: bold;
   text-align: center;
+  font-size: 1.5em;
 }
 
-h5 {
-  color: #999;
+small {
   float: right;
-  font-style: italic;
   margin-top: 10px;
-}
-
-h5 a {
+  color: #999;
   font-style: italic;
-  text-decoration: underline;
+  font-size: 1.1em;
 }
 
-hr {
-  margin-bottom: 30px;
+small a {
+  text-decoration: underline;
+  font-style: italic;
 }
 
 input, textarea, select, button {
