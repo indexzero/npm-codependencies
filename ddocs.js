@@ -99,6 +99,14 @@ ddocs.codependencies = {
     latestDev: {
       reduce: '_sum',
       map: codependencyByType('devDependencies')
+    },
+    latestPeer: {
+      reduce: '_sum',
+      map: codependencyByType('peerDependencies')
+    },
+    latestOptional: {
+      reduce: '_sum',
+      map: codependencyByType('optionalDependencies')
     }
   }
 };
