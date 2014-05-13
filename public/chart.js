@@ -59,7 +59,7 @@ function codependencyGraph(codeps) {
       .attr("height", height)
     .append("svg:g")
       .attr("id", "circle")
-      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+      .attr("transform", "translate(" + ((width / 2) + (width / 20)) + "," + height / 2 + ")");
 
   svg.append("circle")
     .attr("r", innerRadius + 20);
@@ -227,8 +227,10 @@ function codependencyGraph(codeps) {
   //
   container.append('h3')
     .style('margin-top', '30px')
-    .style('margin-left', (width / 3) + 'px' )
-    .text(codeps.type);
+    .text(codeps.type)
+
+  container.append('h4')
+    .text(codeps.lattice.total.subset + ' of ' + codeps.lattice.total.absolute);
 }
 
 //
