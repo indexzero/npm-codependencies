@@ -6,14 +6,43 @@ body {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
+svg {
+  overflow: visible;
+  overflow-x: visible;
+  overflow-y: visible;
+}
+
 h1 {
+  clear: both;
   margin: 0.6em 0 0.1em;
-  font-weight: 500;
-  font-size: 3em;
+  font-weight: 300;
+  font-size: 4em;
 }
 
 h1 span {
   font-weight: 700;
+}
+
+h3 {
+  font-size: 2em;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+h5 {
+  color: #999;
+  float: right;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+h5 a {
+  font-style: italic;
+  text-decoration: underline;
+}
+
+hr {
+  margin-bottom: 30px;
 }
 
 input, textarea, select, button {
@@ -50,6 +79,11 @@ select {
   background-position: 38px;
   background-size: 13px;
   -webkit-appearance: none;
+}
+
+#codependencies article {
+  float: left;
+  width: 50%;
 }
 
 #tooltip {

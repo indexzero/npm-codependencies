@@ -6,13 +6,19 @@ for(var i = 0; i < query.length; i++) {
 }
 
 var packageName  = params.p || 'express'
-    width        = 800,
-    height       = 750,
+    width        = (window.innerWidth / 2) - (window.innerWidth / 20),
+    height       = width * 0.85,
     outerRadius  = height / 2,
-    innerRadius  = outerRadius - 100,
+    innerRadius  = outerRadius - 45,
     numResults   = params.t;
 
 function codependencyGraph(codeps) {
+  var pkg    = codeps.name,
+      names  = codeps.names,
+      matrix = codeps.matrix,
+      values = codeps.values,
+      totals;
+
   var fill = d3.scale.category20c();
 
   var fmt = {
@@ -30,7 +36,11 @@ function codependencyGraph(codeps) {
     .innerRadius(innerRadius)
     .outerRadius(innerRadius + 20);
 
-  var svg = d3.select("body")
+  var container = d3.select('#codependencies')
+    .append('article')
+      .attr('id', codeps.type);
+
+  var svg = container
     .append("svg")
       .attr("width", width)
       .attr("height", height)
@@ -38,17 +48,14 @@ function codependencyGraph(codeps) {
       .attr("id", "circle")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-      svg.append("circle")
-          .attr("r", innerRadius + 20);
+  svg.append("circle")
+    .attr("r", innerRadius + 20);
 
   var graph = svg.append("g")
     .attr("transform", "translate(" + outerRadius * 1.25 + "," + outerRadius + ")");
 
-  var pkg    = codeps.name,
-      names  = codeps.names,
-      matrix = codeps.matrix,
-      values = codeps.values,
-      totals;
+  document.getElementById("package-name").innerHTML = pkg;
+  chord.matrix(matrix);
 
   //
   // Compute all the totals for
@@ -132,22 +139,22 @@ function codependencyGraph(codeps) {
   //   ]).join('\n');
   // }
 
-  // //
-  // // ### function cMouseover (d, i)
-  // // Mouse enter handler for individual groups (i.e. packages)
-  // //
-  // function gMouseover(d, i) {
-  //   d3.select("#tooltip")
-  //     .style("visibility", "visible")
-  //     .html(groupTip(d))
-  //     .style("top", function () { return (d3.event.pageY - 80)+"px"})
-  //     .style("left", function () { return (d3.event.pageX - 130)+"px";});
+  //
+  // ### function cMouseover (d, i)
+  // Mouse enter handler for individual groups (i.e. packages)
+  //
+  function gMouseover(d, i) {
+    // d3.select("#tooltip")
+    //   .style("visibility", "visible")
+    //   .html(groupTip(d))
+    //   .style("top", function () { return (d3.event.pageY - 80)+"px"})
+    //   .style("left", function () { return (d3.event.pageX - 130)+"px";});
 
-  //   chordPaths.classed("fade", function(p) {
-  //     return p.source.index != i
-  //         && p.target.index != i;
-  //   });
-  // }
+    chordPaths.classed("fade", function(p) {
+      return p.source.index != i
+          && p.target.index != i;
+    });
+  }
 
   //
   // Hides the tooltip overlay
@@ -155,9 +162,6 @@ function codependencyGraph(codeps) {
   function hide() {
     d3.select("#tooltip").style("visibility", "hidden");
   }
-
-  document.getElementById("package-name").innerHTML = pkg + ' ' + codeps.type;
-  chord.matrix(codeps.matrix);
 
   //
   // Create arcs representing the codependent
@@ -168,8 +172,8 @@ function codependencyGraph(codeps) {
     .enter().append("svg:g")
       .attr("class", "group")
       .style("fill", function(d) { return fill(d.index); })
-      .style("stroke", function(d) { d3.rgb(fill(d.index)).darker() });
-      // .on("mouseover", gMouseover)
+      .style("stroke", function(d) { d3.rgb(fill(d.index)).darker() })
+      .on("mouseover", gMouseover);
       // .on("mouseout", hide);
 
   g.append("svg:path")
@@ -185,8 +189,8 @@ function codependencyGraph(codeps) {
       .attr("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
       .attr("transform", function(d) {
         return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
-            + "translate(" + (innerRadius + 26) + ")"
-            + (d.angle > Math.PI ? "rotate(180)" : "");
+          + "translate(" + (innerRadius + 26) + ")"
+          + (d.angle > Math.PI ? "rotate(180)" : "");
       })
       .text(function(d) { return names[d.index]; });
 
@@ -204,10 +208,15 @@ function codependencyGraph(codeps) {
       .on("mouseout", hide);
 
   d3.select(window.frameElement).style("height", outerRadius * 2 + "px");
+
+  container.append('h3')
+    .style('margin-top', '30px')
+    .style('margin-left', (width / 3) + 'px' )
+    .text(codeps.type);
 }
 
 d3.json("samples/" + packageName + '.json', function(error, display) {
-  ['dependencies'].forEach(function (type) {
+  ['dependencies', 'devDependencies'].forEach(function (type) {
     display[type].name = packageName;
     display[type].type = type;
     codependencyGraph(display[type]);
