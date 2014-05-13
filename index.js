@@ -83,7 +83,8 @@ codependencies.type = function (options, view, callback) {
 
     var names  = Object.keys(codeps).sort().filter(function (n) { return n !== 'total' }),
         matrix = [],
-        values = [];
+        values = [],
+        lattice;
 
     //
     // For each of the codeps in rows
@@ -104,7 +105,7 @@ codependencies.type = function (options, view, callback) {
         if (index !== -1 && codeps[name][coname]) {
           value[index] = codeps[name][coname].count;
           row[index]   = codeps[name][coname].count
-            * (codeps[name][coname].count / codeps[name].total)
+            * (codeps[name][coname].count / codeps[name].total.subset)
             * pkg[name].relative;
 
           //
@@ -130,12 +131,26 @@ codependencies.type = function (options, view, callback) {
       });
     }
 
+    //
+    // Calculate a reduced lattice with only
+    // the important values.
+    //
+    lattice = Object.keys(pkg)
+      .reduce(function (all, key) {
+        all[key] = key === 'total' ? pkg[key] : {
+          count:    pkg[key].count,
+          relative: pkg[key].relative
+        };
+
+        return all;
+      }, {});
+
     callback(null, {
-      //package: pkg,
-      //lattice: lattice,
-      names: names,
-      matrix: matrix,
-      values: values
+      links:   pkg,
+      lattice: lattice,
+      names:   names,
+      matrix:  matrix,
+      values:  values
     });
   });
 };

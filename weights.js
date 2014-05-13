@@ -26,8 +26,9 @@ var weights = module.exports = function weights(options, callback) {
   weights.calculate(options, function (err, rows) {
     if (err) { return callback(err); }
 
-    var relate = {},
-        total  = 0,
+    var absTotal = 0,
+        relate   = {},
+        total    = 0,
         reduced;
 
     rows.forEach(function (row) {
@@ -51,6 +52,10 @@ var weights = module.exports = function weights(options, callback) {
     });
 
     reduced = Object.keys(relate)
+      .map(function (name) {
+        absTotal += relate[name].count;
+        return name;
+      })
       .sort(function (lname, rname) {
         var lcount = relate[lname].count,
             rcount = relate[rname].count;
@@ -76,7 +81,11 @@ var weights = module.exports = function weights(options, callback) {
       reduced[name].relative = +(reduced[name].count / total);
     });
 
-    reduced.total = total;
+    reduced.total = {
+      subset:   total,
+      absolute: absTotal
+    };
+
     callback(null, reduced);
   });
 };

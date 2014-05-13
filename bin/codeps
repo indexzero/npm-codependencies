@@ -33,7 +33,7 @@ ddocs.seed(registry, function (err) {
     '  view:     %s',
     '  top:      %s',
     '----------------------------'
-  ].join('\n'), registry, package, view, top);
+  ].join('\n'), registry, package, view || 'ALL', top);
   codeps({
     package:  package,
     registry: registry,
@@ -46,6 +46,13 @@ ddocs.seed(registry, function (err) {
       return process.exit(1)
     }
 
+    //
+    // Delete all of the "links" from the set of results
+    // so that we can reduce bandwidth
+    //
+    Object.keys(results).forEach(function (key) {
+      delete results[key].links;
+    });
 
     //
     // Dump two kinds of JSON for now
