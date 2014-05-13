@@ -15,6 +15,11 @@ var registry = argv.r || 'http://localhost:5984/registry',
     skip     = argv.s || 0;
     top      = argv.t || 10;
 
+if (argv.h || argv.help) {
+  console.log('usage: codeps -r [registry] -p [package]');
+  return process.exit(1);
+}
+
 console.log('start   | co-*dependencies');
 console.log('seed    | %s', registry);
 ddocs.seed(registry, function (err) {
