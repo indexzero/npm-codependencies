@@ -32,7 +32,9 @@ function codependencyGraph(codeps) {
       pkg         = codeps.name,
       totals;
 
-  var fill = d3.scale.category20c();
+  // var fill = d3.scale.category10();
+  var colorbrewer = ['rgb(139,214,254)','rgb(32,120,238)','rgb(123,250,130)','rgb(51,160,44)','rgb(251,160,206)','rgb(227,26,28)','rgb(252,233,61)','rgb(255,127,0)','rgb(202,178,230)','rgb(106,61,154)'];
+  var fill = d3.scale.ordinal().range(colorbrewer);
 
   var fmt = {
     percent: d3.format('.2%'),
