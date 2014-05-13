@@ -40,13 +40,12 @@ function draw(p, v, s, t) {
   var graph = svg.append("g")
       .attr("transform", "translate(" + outerRadius * 1.25 + "," + outerRadius + ")");
 
-  d3.json("samples/" + packageName + '-display.json', function(error, display) {
-
+  d3.json("samples/" + p + '-display.json', function(error, display) {
     var names  = display.names,
         matrix = [],
         n      = 0;
 
-    document.getElementById("package-name").innerHTML += packageName;
+    document.getElementById("package-name").innerHTML += p;
 
     chord.matrix(display.matrix);
 
@@ -128,8 +127,6 @@ function draw(p, v, s, t) {
   }, 100); // TODO: timeout should go elsewhere
 
   d3.select(self.frameElement).style("height", outerRadius * 2 + "px");
-
 }
 
-// draw('winston', 'dependencies', 0, 10);
-// draw('express', 'dependencies', 0, 20);
+draw(packageName, 'dependencies', 0, 10);
