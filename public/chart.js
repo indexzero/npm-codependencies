@@ -1,22 +1,35 @@
-var query = location.search.substring(1).split("&");
-var params = {};
-for(var i = 0; i < query.length; i++) {
-  var item = query[i].split("=");
-  params[item[0]] = item[1];
+
+//
+// ### function querystring()
+// Returns a parsed querystring using a __very__
+// naive parsing method.
+//
+function querystring() {
+  return location.search.substring(1).split("&")
+    .reduce(function (params, value) {
+      parts = value.split('=');
+      params[parts[0]] = parts[1];
+      return params;
+    }, {});
 }
 
-var packageName  = params.p || 'express'
-    width        = (window.innerWidth / 2) - (window.innerWidth / 20),
-    height       = width * 0.85,
-    outerRadius  = height / 2,
-    innerRadius  = outerRadius - 45,
-    numResults   = params.t;
+var params      = querystring(),
+    packageName = params.p || 'express';
 
+//
+// ### function codependencyGraph (codeps)
+// Draws the codependency graph based on the overall size
+// of the relationship.
+//
 function codependencyGraph(codeps) {
-  var pkg    = codeps.name,
-      names  = codeps.names,
-      matrix = codeps.matrix,
-      values = codeps.values,
+  var width       = (window.innerWidth / 2) - (window.innerWidth / 20),
+      height      = width * 0.85,
+      outerRadius = height / 2,
+      innerRadius = outerRadius - 45,
+      matrix      = codeps.matrix,
+      values      = codeps.values,
+      names       = codeps.names,
+      pkg         = codeps.name,
       totals;
 
   var fill = d3.scale.category20c();
@@ -209,12 +222,19 @@ function codependencyGraph(codeps) {
 
   d3.select(window.frameElement).style("height", outerRadius * 2 + "px");
 
+  //
+  // Append the <h3> representing the subtitle of this diagram.
+  //
   container.append('h3')
     .style('margin-top', '30px')
     .style('margin-left', (width / 3) + 'px' )
     .text(codeps.type);
 }
 
+//
+// Download the JSON itself and calculate the relative widths
+// based on the totals.
+//
 d3.json("samples/" + packageName + '.json', function(error, display) {
   ['dependencies', 'devDependencies'].forEach(function (type) {
     display[type].name = packageName;
