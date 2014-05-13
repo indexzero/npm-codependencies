@@ -12,7 +12,7 @@ var packageName  = params.p || 'express'
     innerRadius  = outerRadius - 100,
     numResults   = params.t;
 
-function draw(codeps) {
+function codependencyGraph(codeps) {
   var fill = d3.scale.category20c();
 
   var fmt = {
@@ -168,9 +168,9 @@ function draw(codeps) {
     .enter().append("svg:g")
       .attr("class", "group")
       .style("fill", function(d) { return fill(d.index); })
-      .style("stroke", function(d) { d3.rgb(fill(d.index)).darker() })
-      .on("mouseover", gMouseover)
-      .on("mouseout", hide);
+      .style("stroke", function(d) { d3.rgb(fill(d.index)).darker() });
+      // .on("mouseover", gMouseover)
+      // .on("mouseout", hide);
 
   g.append("svg:path")
     .style("fill", function(d) { return fill(d.index); })
@@ -206,8 +206,10 @@ function draw(codeps) {
   d3.select(window.frameElement).style("height", outerRadius * 2 + "px");
 }
 
-d3.json("samples/" + packageName + '-display.json', function(error, display) {
-  display.name = packageName;
-  display.type = 'dependencies';
-  draw(display);
+d3.json("samples/" + packageName + '.json', function(error, display) {
+  ['dependencies'].forEach(function (type) {
+    display[type].name = packageName;
+    display[type].type = type;
+    codependencyGraph(display[type]);
+  });
 });

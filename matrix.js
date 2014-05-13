@@ -24,6 +24,7 @@ var async = require('async'),
 // relationship of the `package`.
 //
 var matrix = module.exports = function (options, callback) {
+  console.dir(options);
   weights(options, function (err, relate) {
     if (err) { return callback(err); }
 
