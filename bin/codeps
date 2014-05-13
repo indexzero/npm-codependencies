@@ -54,40 +54,19 @@ ddocs.seed(registry, function (err) {
       delete results[key].links;
     });
 
-    //
-    // Dump two kinds of JSON for now
-    // - all:     All relevant data (very large).
-    // - display: Exactly the data to send to the browser.
-    //
-    var output = {
-      display: {
-        files: [
-          path.join(__dirname, '..', 'samples', package + '.json'),
-          path.join(__dirname, '..', 'public', 'samples', package + '.json'),
-        ],
-        data: JSON.stringify(results, null, 2)
+    var file = path.join(__dirname, '..', '..', 'www', 'public', 'json', 'codeps', package + '.json');
+    console.log('Write %s', file);
+    fs.writeFile(
+      file,
+      JSON.stringify(results, null, 2),
+      'utf8',
+      function (err) {
+        if (err) {
+          throw err;
+        }
+
+        console.log('%s co-*dependencies | ok', package);
       }
-    };
-
-    //
-    // ### writeFiles (type, callback)
-    // Writes all files of the specified type
-    //
-    function writeFiles(type, callback) {
-      async.forEach(output[type].files, function (file, next) {
-        console.log('Write %s', file);
-        fs.writeFile(file, output[type].data, 'utf-8', next);
-      }, callback);
-    }
-
-    async.parallel([
-      async.apply(writeFiles, 'display')
-    ], function (err) {
-      if (err) {
-        throw err;
-      }
-
-      console.log('%s co-*dependencies | ok', package);
-    })
+    );
   });
 });
