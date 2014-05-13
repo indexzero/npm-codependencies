@@ -108,46 +108,46 @@ function draw(codeps) {
       .style("left", function () { return (d3.event.pageX - 100)+"px";})
   };
 
-  //
-  // ### function groupTip (d, i)
-  // Returns the text for the group tooltip
-  //
-  function groupTip (d) {
-    var name    = names[d.index],
-        source  = d.index,
-        headers = [],
-        rows    = [];
+  // //
+  // // ### function groupTip (d, i)
+  // // Returns the text for the group tooltip
+  // //
+  // function groupTip (d) {
+  //   var name    = names[d.index],
+  //       source  = d.index,
+  //       headers = [],
+  //       rows    = [];
 
-    return [
-      '<table>',
-      '  <thead>',
-      '    <tr>',
-    ].concat(headers).concat([
-      '    </tr>',
-      '  </thead>',
-      '  <tbody>'
-    ]).concat(rows).concat([
-      '  </tbody>',
-      '</table>'
-    ]).join('\n');
-  }
+  //   return [
+  //     '<table>',
+  //     '  <thead>',
+  //     '    <tr>',
+  //   ].concat(headers).concat([
+  //     '    </tr>',
+  //     '  </thead>',
+  //     '  <tbody>'
+  //   ]).concat(rows).concat([
+  //     '  </tbody>',
+  //     '</table>'
+  //   ]).join('\n');
+  // }
 
-  //
-  // ### function cMouseover (d, i)
-  // Mouse enter handler for individual groups (i.e. packages)
-  //
-  function gMouseover(d, i) {
-    d3.select("#tooltip")
-      .style("visibility", "visible")
-      .html(groupTip(d))
-      .style("top", function () { return (d3.event.pageY - 80)+"px"})
-      .style("left", function () { return (d3.event.pageX - 130)+"px";});
+  // //
+  // // ### function cMouseover (d, i)
+  // // Mouse enter handler for individual groups (i.e. packages)
+  // //
+  // function gMouseover(d, i) {
+  //   d3.select("#tooltip")
+  //     .style("visibility", "visible")
+  //     .html(groupTip(d))
+  //     .style("top", function () { return (d3.event.pageY - 80)+"px"})
+  //     .style("left", function () { return (d3.event.pageX - 130)+"px";});
 
-    chordPaths.classed("fade", function(p) {
-      return p.source.index != i
-          && p.target.index != i;
-    });
-  }
+  //   chordPaths.classed("fade", function(p) {
+  //     return p.source.index != i
+  //         && p.target.index != i;
+  //   });
+  // }
 
   //
   // Hides the tooltip overlay
