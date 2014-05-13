@@ -15,6 +15,12 @@ var packageName  = params.p || 'express'
 function draw(codeps) {
   var fill = d3.scale.category20c();
 
+  var fmt = {
+    percent: d3.format('.2%'),
+    decimal: d3.format(',.2f'),
+    integer: d3.format('n')
+  }
+
   var chord = d3.layout.chord()
     .padding(.08)
     .sortSubgroups(d3.descending)
@@ -40,16 +46,54 @@ function draw(codeps) {
 
   var pkg    = codeps.name,
       names  = codeps.names,
-      matrix = [],
-      n      = 0;
+      matrix = codeps.matrix,
+      values = codeps.values,
+      totals;
+
+  //
+  // Compute all the totals for
+  // all packages
+  //
+  totals = values.map(function (arr) {
+    return arr.reduce(function (sum, val) {
+      return sum + val;
+    }, 0);
+  });
 
   //
   // ### function chordTip (d, i)
   // Returns the text for the chord tooltip
   //
   function chordTip (d, i) {
-    var p = d3.format(".2%"), q = d3.format(",.3r")
-    return names[d.source.index] + " to " + names[d.target.index];
+    var source = d.source.index,
+        target = d.target.index;
+
+    return [
+      '<table>',
+      '  <thead>',
+      '    <tr>',
+      '      <td></td>',
+      '      <td>Raw</td>',
+      '      <td>Weighted</td>',
+      '      <td>Total</td>',
+      '    </tr>',
+      '  </thead>',
+      '  <tbody>',
+      '    <tr>',
+      '      <td>' + names[source] + '</td>',
+      '      <td>' + fmt.integer(values[source][target]) + '</td>',
+      '      <td>' + fmt.decimal(matrix[source][target]) + '%</td>',
+      '      <td>' + fmt.integer(totals[source]) + '</td>',
+      '    </tr>',
+      '    <tr>',
+      '      <td>' + names[target] + '</td>',
+      '      <td>' + fmt.integer(values[target][source]) + '</td>',
+      '      <td>' + fmt.decimal(matrix[target][source]) + '%</td>',
+      '      <td>' + fmt.integer(totals[target]) + '</td>',
+      '    </tr>',
+      '  </tbody>',
+      '</table>'
+    ].join('\n');
   }
 
   //
@@ -69,9 +113,23 @@ function draw(codeps) {
   // Returns the text for the group tooltip
   //
   function groupTip (d) {
-    var p = d3.format(".1%"), q = d3.format(",.3r")
-    // debugger;
-    return names[d.index];
+    var name    = names[d.index],
+        source  = d.index,
+        headers = [],
+        rows    = [];
+
+    return [
+      '<table>',
+      '  <thead>',
+      '    <tr>',
+    ].concat(headers).concat([
+      '    </tr>',
+      '  </thead>',
+      '  <tbody>'
+    ]).concat(rows).concat([
+      '  </tbody>',
+      '</table>'
+    ]).join('\n');
   }
 
   //
