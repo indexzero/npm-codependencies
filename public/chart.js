@@ -14,7 +14,7 @@ function querystring() {
 }
 
 var params      = querystring(),
-    packageName = params.p || 'express';
+    packageName = params.p || 'winston';
 
 //
 // ### function codependencyGraph (codeps)
