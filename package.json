@@ -1,5 +1,5 @@
 {
-  "name": "codeps",
+  "name": "npm-codependencies",
   "version": "0.2.3",
   "description": "Gets all the co-dependencies for a module",
   "main": "lib/index.js",
@@ -10,6 +10,9 @@
     "cli-table": "~0.3.0",
     "optimist": "~0.6.1",
     "request": "~2.34.0"
+  },
+  "bin": {
+    "npm-codependencies": "bin/codeps"
   },
   "engines": {
     "node": "0.10.x"
