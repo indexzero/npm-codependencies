@@ -4,7 +4,7 @@ Analyze codependency relationships between package `dependencies`, `devDependenc
 
 ## Usage
 
-There are two distinct ways to use `npm-static-stats`:
+There are two distinct ways to use `npm-codependencies`:
 
 ### 1. Use it programmatically
 
