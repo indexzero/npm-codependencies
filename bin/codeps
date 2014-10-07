@@ -4,8 +4,8 @@ var fs = require('fs'),
     path = require('path'),
     argv = require('optimist').argv,
     async = require('async'),
-    ddocs = require('../ddocs'),
-    codeps = require('../index');
+    ddocs = require('../lib/ddocs'),
+    codeps = require('../lib/index');
 
 var registry = argv.r || 'http://localhost:5984/registry',
     package  = argv.p || 'winston',
@@ -54,7 +54,7 @@ ddocs.seed(registry, function (err) {
       delete results[key].links;
     });
 
-    var file = path.join(__dirname, '..', '..', 'www', 'public', 'json', 'codeps', package + '.json');
+    var file = path.join(process.cwd(), package + '.json');
     console.log('Write %s', file);
     fs.writeFile(
       file,

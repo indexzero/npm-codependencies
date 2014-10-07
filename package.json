@@ -2,17 +2,14 @@
   "name": "codeps",
   "version": "0.2.3",
   "description": "Gets all the co-dependencies for a module",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "main": "lib/index.js",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "license": "Apache 2",
   "dependencies": {
-    "request": "^2.34.0",
-    "async": "^0.7.0",
-    "optimist": "^0.6.1",
-    "cli-table": "^0.3.0"
+    "async": "~0.9.0",
+    "cli-table": "~0.3.0",
+    "optimist": "~0.6.1",
+    "request": "~2.34.0"
   },
   "engines": {
     "node": "0.10.x"
