@@ -1,2 +1,4 @@
 !samples/*-display.json
 samples/*.json
+!package.json
+*.json
