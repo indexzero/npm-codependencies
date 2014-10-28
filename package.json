@@ -4,6 +4,9 @@
   "description": "Gets all the co-dependencies for a module",
   "main": "lib/index.js",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
+  "contributors": [
+    "Jane Kim <jane@janekim.me>"
+  ],
   "license": "Apache 2",
   "dependencies": {
     "async": "~0.9.0",

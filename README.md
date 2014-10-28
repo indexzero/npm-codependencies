@@ -36,5 +36,6 @@ npm-codependencies -r http://skimdb.nodejitsu.com -p $PACKAGE_NAME
 cat "$PACKAGE_NAME.json"
 ```
 
-##### Author: [Charlie Robbins](https://github.com/indexzero)
 ##### License: Apache 2
+##### Author: [Charlie Robbins](https://github.com/indexzero)
+##### Contributors: [Jane Kim](https://github.com/janecakemaster)
